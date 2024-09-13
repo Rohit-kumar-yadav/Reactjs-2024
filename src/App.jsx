@@ -1,11 +1,5 @@
 import "./App.css";
 
-import ProductList from "./components/products";
-import ClassBasedComponents from "./components/class-based-components";
-import UseStateFunction from "./components/useStateFunction";
-let dummyProductData = ["product 1", "product 2", "product 3"];
-import UseEffectFunction from "./components/products/useEffectFunction";
-import Users from "./components/products/components/users";
 import ContextButtonComponent from "./components/context-concept/button";
 import ContextTextComponent from "./components/context-concept/text";
 function App() {
@@ -18,8 +12,9 @@ function App() {
       <ProductList listitems={dummyProductData}/>
       <ClassBasedComponents /> */}
       {/* <FunctionalComponent /> */}
-      <ContextButtonComponent />
+      
       <ContextTextComponent />
+      <ContextButtonComponent />
     </div>
   );
 }
