@@ -2,6 +2,7 @@ import "./App.css";
 
 import ContextButtonComponent from "./components/context-concept/button";
 import ContextTextComponent from "./components/context-concept/text";
+import FormComponent from "./components/form";
 import UseReducerExample from "./components/use-reduce-example";
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
       
       {/* <ContextTextComponent />
       <ContextButtonComponent /> */}
-      <UseReducerExample />
+      {/* <UseReducerExample /> */}
+      <FormComponent />
     </div>
   );
 }
