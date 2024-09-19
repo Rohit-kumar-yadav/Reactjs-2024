@@ -1,59 +1,66 @@
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { addNewProduct, fetchListOfProducts } from "./api";
 
 function ReactQueryExample() {
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState(0);
+  const [userdata, setuserdata] = useState({
+    nameof: "",
+    priceof: ""
+  });
+
+  const getqueryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["data"],
     queryFn: async () => fetchListOfProducts(),
   });
- 
-  console.log(data);
-  
+
   const { mutateAsync: handleAddNewProductMutation } = useMutation({
     mutationFn: addNewProduct,
+    onSuccess:()=>[
+      getqueryClient.invalidateQueries("data"),
+    ]
   });
 
-  async function handleAddNewProduct() {
-    const re = await handleAddNewProductMutation(productName,productPrice);
-    
-    setProductName("");
-    setProductPrice(0)
-    console.log(re);
+  async function handleAddNewProduct(e) {
+    e.preventDefault();
+    const re = await handleAddNewProductMutation(userdata);
+    console.log("re is: ", re);
+    setuserdata({ nameof: "", priceof: "" });
   }
 
-  function handleInput(e){
-    setProductPrice(e.target.value)
-  }
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setuserdata((prevState) => ({
+      ...prevState,
+      [name]: name === "priceof" ? parseFloat(value) : value,
+    }));
+  };
 
-  console.log(productPrice);
+  console.log(userdata);
   
-  
-  if (isLoading) return <h2>Products is Loading! please wait</h2>;
+
+  if (isLoading) return <h2>Products are Loading! Please wait...</h2>;
 
   return (
     <>
       <h1>ReactQueryExample</h1>
-
       <div>
         <input
-          name="name"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
+          name="nameof"
+          value={userdata.nameof}
+          onChange={handleInputChange}
           placeholder="Enter product name"
         />
         <input
-          name="price"
-          value={productPrice}
-          onChange={handleInput}
+          name="priceof"
+          value={userdata.priceof}
+          onChange={handleInputChange}
           placeholder="Enter product price"
         />
         <button
           onClick={handleAddNewProduct}
-          disabled={productName.trim() === "" && productName.trim() === ""}
+          disabled={userdata.nameof.trim() === "" || userdata.priceof === ""}
           type="button"
         >
           Add product
@@ -62,7 +69,7 @@ function ReactQueryExample() {
 
       <ul>
         {data?.length > 0
-          ? data.map((item, index) => <li key={index}>{item.name}</li>)
+          ? data.map((item, index) => <li key={index}>{item.name} - {item.price}</li>)
           : []}
       </ul>
     </>

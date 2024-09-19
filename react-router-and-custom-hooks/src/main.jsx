@@ -14,4 +14,3 @@ createRoot(document.getElementById("root")).render(
   </BrowserRouter>
 );
 
-export default Main;
